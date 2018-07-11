@@ -15,6 +15,9 @@ default mas_can_unlock_story = False
 # store containing stories-related things
 init -1 python in mas_stories:
 
+    # TYPES:
+    TYPE_SCARY = 0
+
     # pane constants
     STORY_X = 680
     STORY_Y = 40
@@ -27,7 +30,7 @@ init -1 python in mas_stories:
 
 
 # entry point for stories flow
-label mas_stories_start:
+label mas_stories_start(scary=False):
 
     python:
         import store.mas_stories as mas_stories
@@ -37,6 +40,8 @@ label mas_stories_start:
             (mas_stories.story_database[k].prompt, k, False, False)
             for k in mas_stories.story_database
             if mas_stories.story_database[k].unlocked and seen_event(k)
+            and ((scary and mas_stories.story_database[k].category is not None)
+            or (not scary and not mas_stories.story_database[k].category) )
         ]
 
         # sanity check for first timers
@@ -45,6 +50,8 @@ label mas_stories_start:
                 (mas_stories.story_database[k].prompt, k, False, False)
                 for k in mas_stories.story_database
                 if mas_stories.story_database[k].unlocked
+                and ((scary and mas_stories.story_database[k].category is not None)
+                or (not scary and not mas_stories.story_database[k].category) )
             ]
 
             # set the mas_can_unlock_story flag to False since it
@@ -326,4 +333,68 @@ label mas_story_ravel:
     m 3tku "'That's why you remember nothing; because everything is the way it was before you made any wishes.'"
     m 1dsd "'All right,' said the man, 'I don't believe this, but there's no harm in wishing. I wish to know who I am.'"
     m 1tfb "'Funny,' said the old woman as she granted his wish and disappeared forever. 'That was your first wish.'"
+    return
+
+
+# Scary stories start here
+label mas_scary_story_setup:
+    $ scene_change = True
+    $ mas_is_raining = True
+    call spaceroom
+    stop music fadeout 1.0
+    play background audio.rain fadein 1.0 loop
+
+#    $ songs.current_track = songs.FP_NO_SONG
+#    $ songs.selected_track = songs.FP_NO_SONG
+
+    $ HKBHideButtons()
+    $ store.songs.enabled = False
+    python:
+        story_begin_quips = [
+            "Alright let's start the story.",
+            "Ready to hear the story?",
+            "Ready for story time?",
+            "Let's begin~",
+            "Let's begin then~"
+        ]
+        story_begin_quip=renpy.random.choice(story_begin_quips)
+    m 3eua "[story_begin_quip]"
+    m 1duu "Ahem."
+    return
+
+label mas_scary_story_cleanup:
+    $ scene_change = True
+    $ mas_is_raining = False
+    call spaceroom
+    stop background fadeout 1.0
+
+    $ HKBShowButtons()
+    $ store.songs.enabled = True
+    return
+
+# TODO Replace placeholders once the flow works
+# These are placeholders
+init 5 python:
+    addEvent(Event(persistent._mas_story_database,eventlabel="mas_story_closed_eyes",
+    category=[store.mas_stories.TYPE_SCARY], prompt="Don't close your eyes",unlocked=True),
+    eventdb=store.mas_stories.story_database)
+
+label mas_story_closed_eyes:
+    call mas_scary_story_setup
+    m 3euc "If you get scared at night, don’t keep your eyes closed for too long."
+    m "There’s a reason you’re scared, and now you can’t see it approach."
+    call mas_scary_story_cleanup
+    return
+
+# These are placeholders
+init 5 python:
+    addEvent(Event(persistent._mas_story_database,eventlabel="mas_story_grandpa",
+    category=[store.mas_stories.TYPE_SCARY], prompt="The new grandpa",unlocked=False),
+    eventdb=store.mas_stories.story_database)
+
+label mas_story_grandpa:
+    call mas_scary_story_setup
+    m "Grandpa died smoking a cigar in his favorite chair."
+    m "We got a new one but from the ash marks he leaves behind he has a new favorite chair."
+    call mas_scary_story_cleanup
     return

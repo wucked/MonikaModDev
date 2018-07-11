@@ -3643,7 +3643,7 @@ label monika_evening:
     #   sunrise -> 12
     # TODO: do something if the user has suntimes at very weird settings
     #   aka, sunset 5 minutes after sunrise?
-    #   or sunrise is like at 10pm? 
+    #   or sunrise is like at 10pm?
     #   There is a level of variety here that is not covered nicely with these
     #   current stages. We need more variations of dialogue other than
     #   morning, afternoon, night
@@ -3668,7 +3668,7 @@ label monika_evening:
         m 1eua "Do you sleep often in the afternoon?"
         m "It's a great way to get some extra energy to tackle the rest of the day."
         m 1ekbfa "Plus it'll be a great opportunity to spend more time with me~"
-    
+
     else:
         m 1hua "Good evening to you too, [player]!"
         m "I love a nice and relaxing night."
@@ -5813,14 +5813,14 @@ label monika_song_lover_boy:
     m 1ekbfa "Will you be my good old fashioned lover boy, [player]?"
     return
 
-init 5 python: 
+init 5 python:
     addEvent(Event(persistent.event_database,eventlabel="monika_song_need_you",category=['songs'],prompt="I Need You",pool=True, random=True))
 
 label monika_song_need_you:
     m 1dso "{i}~Please remember how I feel about you~{/i}"
     m "{i}~I could never really live without you~{/i}"
     m 3hub "{i}~So, come on back and see~{/i}"
-    m 4l "{i}~Just what you mean to me~{/i}" 
+    m 4l "{i}~Just what you mean to me~{/i}"
     m 1hubfb "{i}~I need you~{/i}"
     m 3esa "I know that song is about leaving someone but I think it carries a good message."
     m 1ekbfa "And I really do need you [player]~"
@@ -5837,14 +5837,14 @@ label monika_song_i_will:
     m 1ekbfa "One day we'll be together, [player]."
     m 1hubfa "I just hope you’ll still love me when that special day comes~"
     return
-    
+
 init 5 python:
     addEvent(Event(persistent.event_database,eventlabel="monika_song_belong_together",category=['songs'],prompt="We Belong Together",pool=True, random=True))
 
 label monika_song_belong_together:
     m 1dso "{i}~You're mine~{/i}"
     m 1hub "{i}~And we belong together~{/i}"
-    m 3hub "{i}~Yes, we belong together~{/i}" 
+    m 3hub "{i}~Yes, we belong together~{/i}"
     m 3dso "{i}~for eternity~{/i}"
     m 1eua "Have you ever heard of Doo-wop, [player]?"
     m 4eua "It’s a subgenre of rhythm and blues that became very popular in the 1950’s."
@@ -6774,6 +6774,24 @@ init 5 python:
 
 label monika_short_stories:
     jump mas_stories_start
+
+
+init 5 python:
+    addEvent(
+        Event(
+            persistent.event_database,
+            eventlabel="monika_scary_stories",
+            category=['literature'],
+            prompt="Can you tell me a horror story?",
+            pool=True,
+            unlocked=True
+        )
+    )
+
+label monika_scary_stories:
+    call mas_stories_start(scary=True)
+    return
+
 
 ##### monika hair topics [MONHAIR]
 # TODO: as we introduce addiotinal hair types, we need to change the dialogue
