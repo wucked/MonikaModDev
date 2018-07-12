@@ -1690,7 +1690,7 @@ init -1 python:
 #   face-{face part type}-{face part name}{-n}.png
 #   (ie: face-mouth-big.png / face-mouth-big-n.png)
 # leaning filenames:
-#   face-leaning-{face part type}-{face part name}{-n}.png
+#   face-leaning-{lean name}-{face part type}-{face part name}{-n}.png
 #   (ie: face-leaning-eyes-sparkle.png / face-leaning-eyes-sparkle-n.png)
 #
 ## BODY / POSE:
